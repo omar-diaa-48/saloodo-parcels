@@ -9,9 +9,4 @@ export class DriverController extends BaseController<Driver> {
 	constructor(private driverService: DriverService) {
 		super(driverService)
 	}
-
-	@Get()
-	async getAllDrivers() {
-		return this.driverService.findAllDocuments();
-	}
 }

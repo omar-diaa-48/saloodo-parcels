@@ -6,7 +6,14 @@ export class BaseController<T extends Document> {
 	constructor(private readonly baseService: BaseService<T>) { }
 
 	@Get()
-	async getAll() {
+	async findAllDocuments() {
 		return this.baseService.findAllDocuments();
+	}
+
+	@Get(':id')
+	async findOneDocument(
+		@Param() id: string
+	) {
+		return this.baseService.findOneDocument(id);
 	}
 }
