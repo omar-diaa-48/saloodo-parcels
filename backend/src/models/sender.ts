@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Document } from 'mongoose';
 
 export type SenderDocument = HydratedDocument<Sender>;
 
 @Schema()
-export class Sender {
+export class Sender extends Document {
 	@Prop()
 	name: string;
 }
