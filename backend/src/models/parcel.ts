@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Sender } from './sender';
 
 export type ParcelDocument = HydratedDocument<Parcel>;
 
 @Schema()
-export class Parcel {
+export class Parcel extends Document {
 	@Prop()
 	item: string;
 
