@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory, } from '@nestjs/mongoose';
+import { HydratedDocument, Document } from 'mongoose';
 
 export type DriverDocument = HydratedDocument<Driver>;
 
 @Schema()
-export class Driver {
+export class Driver extends Document {
 	@Prop()
 	name: string;
 }
