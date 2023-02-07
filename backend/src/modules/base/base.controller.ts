@@ -12,7 +12,7 @@ export class BaseController<T extends Document> {
 
 	@Get(':id')
 	async findOneDocument(
-		@Param() id: string
+		@Param('id') id: string
 	) {
 		return this.baseService.findOneDocument(id);
 	}
