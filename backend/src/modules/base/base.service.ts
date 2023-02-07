@@ -5,15 +5,15 @@ import { Model, Document } from 'mongoose';
 export class BaseService<T extends Document> {
 	constructor(private readonly model: Model<T>) { }
 
-	async findAllDocuments() {
-		return this.model.find();
+	async findAllDocuments(pagination: { limit: number, skip: number } = { limit: 10, skip: 0 }, relations: string[] = []) {
+		return this.model.find().limit(pagination.limit).skip(pagination.skip).populate(relations);
 	}
 
-	async findOneDocument(id: string) {
-		const document = this.model.findById(id);
+	async findOneDocument(id: string, relations: string[] = []) {
+		const document = this.model.findById(id).populate(relations);
 
 		if (!document) {
-			throw new BadRequestException('Model with the specified id doesn`t existi')
+			throw new BadRequestException('Model with the specified id doesn`t exist')
 		}
 
 		return document;

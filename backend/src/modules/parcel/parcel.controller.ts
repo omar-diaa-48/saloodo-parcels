@@ -12,6 +12,18 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 		super(parcelService)
 	}
 
+	@Get()
+	async findAllDocuments() {
+		return this.parcelService.findAllDocuments({ limit: 10, skip: 0 }, ["sender"]);
+	}
+
+	@Get(':id')
+	async findOneDocument(
+		@Param('id') id: string
+	) {
+		return this.parcelService.findOneDocument(id, ["sender"]);
+	}
+
 	@Post()
 	async addOneDocument(
 		@Body() dto: CreateParcelDto
