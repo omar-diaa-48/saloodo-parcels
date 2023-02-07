@@ -1,11 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from '../schemes/login';
 import { Controller, useForm } from 'react-hook-form';
-import { useAppDispatch } from '../store/hooks';
 import { useNavigate } from 'react-router-dom';
-import { signinAction } from '../store/slices/user';
-import { ISigninDto } from "../utils/dtos"
 import { TextInput, ValidatedInput } from '../components/shared/input';
+import { loginSchema } from '../schemes/login';
+import { useAppDispatch } from '../store/hooks';
+import { signinAction } from '../store/slices/user';
+import { ISigninDto } from "../utils/dtos";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Login = () => {
 		dispatch(signinAction(values))
 			.then((data) => {
 				if (data.meta.requestStatus === "fulfilled") {
-					navigate('/home')
+					navigate('/parcels')
 				}
 			})
 	};
