@@ -1,5 +1,5 @@
+import { Body, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Document } from "mongoose";
-import { Get, Res, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { BaseService } from "./base.service";
 
 export class BaseController<T extends Document, CreateDto, UpdateDto> {
@@ -11,10 +11,10 @@ export class BaseController<T extends Document, CreateDto, UpdateDto> {
 	}
 
 	@Get(':id')
-	async findOneDocument(
+	async findOneDocumentById(
 		@Param('id') id: string
 	) {
-		return this.baseService.findOneDocument(id);
+		return this.baseService.findOneDocumentById(id);
 	}
 
 	@Post()

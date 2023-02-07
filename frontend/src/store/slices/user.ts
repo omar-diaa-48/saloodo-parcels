@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../utils/api"
+import axiosInstance from "../../utils/api";
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../utils/constants";
 import { ISigninDto } from "../../utils/dtos";
 import { IAuthResponse } from "../../utils/responses";
@@ -21,7 +21,7 @@ const initialState = {
 export const signinAction = createAsyncThunk<IAuthResponse, ISigninDto>('user/signin', async (userData, { rejectWithValue }) => {
 	const { name, type } = userData;
 	try {
-		const authRes = await axiosInstance.post('signin', { name, type });
+		const authRes = await axiosInstance.post('auth/signin', { name, type });
 
 		const data: AxiosResponseDataType<IAuthResponse> = authRes.data;
 

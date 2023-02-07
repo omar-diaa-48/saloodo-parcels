@@ -10,5 +10,6 @@ import { SenderService } from './sender.service';
 	],
 	controllers: [SenderController],
 	providers: [SenderService],
+	exports: [SenderService]
 })
 export class SenderModule { }

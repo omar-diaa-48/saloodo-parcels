@@ -20,7 +20,6 @@ const Login = () => {
 	const { errors, isValid } = formState;
 
 	const loginCallback = (values: ISigninDto) => {
-		console.log({ values });
 		dispatch(signinAction(values))
 			.then((data) => {
 				if (data.meta.requestStatus === "fulfilled") {

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Model, Document } from 'mongoose';
+import { Document, Model } from 'mongoose';
 
 @Injectable()
 export class BaseService<T extends Document> {
@@ -9,7 +9,7 @@ export class BaseService<T extends Document> {
 		return this.model.find().limit(pagination.limit).skip(pagination.skip).populate(relations);
 	}
 
-	async findOneDocument(id: string, relations: string[] = []) {
+	async findOneDocumentById(id: string, relations: string[] = []) {
 		const document = this.model.findById(id).populate(relations);
 
 		if (!document) {
@@ -24,7 +24,7 @@ export class BaseService<T extends Document> {
 	}
 
 	async updateOneDocument(id: string, dto: any) {
-		const documentToBeUpdated = await this.findOneDocument(id);
+		const documentToBeUpdated = await this.findOneDocumentById(id);
 
 		documentToBeUpdated.update(dto);
 		await documentToBeUpdated.save();
@@ -33,7 +33,7 @@ export class BaseService<T extends Document> {
 	}
 
 	async removeOneDocument(id: string) {
-		const documentToBeRemoved = await this.findOneDocument(id);
+		const documentToBeRemoved = await this.findOneDocumentById(id);
 
 		const { _id } = documentToBeRemoved;
 

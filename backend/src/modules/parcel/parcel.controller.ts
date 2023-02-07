@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpStatus, InternalServerErrorException, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Parcel } from 'src/models/parcel';
 import { BaseController } from '../base/base.controller';
 import { CreateParcelDto, UpdateParcelDto } from './parcel.dto';
 import { ParcelService } from './parcel.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('parcels')
 @Controller('parcels')
@@ -18,10 +18,10 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 	}
 
 	@Get(':id')
-	async findOneDocument(
+	async findOneDocumentById(
 		@Param('id') id: string
 	) {
-		return this.parcelService.findOneDocument(id, ["sender"]);
+		return this.parcelService.findOneDocumentById(id, ["sender"]);
 	}
 
 	@Post()
