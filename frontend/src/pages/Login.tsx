@@ -1,5 +1,3 @@
-import React from 'react'
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from '../schemes/login';
 import { Controller, useForm } from 'react-hook-form';
@@ -24,7 +22,11 @@ const Login = () => {
 	const loginCallback = (values: ISigninDto) => {
 		console.log({ values });
 		dispatch(signinAction(values))
-			.then(() => navigate('/home'))
+			.then((data) => {
+				if (data.meta.requestStatus === "fulfilled") {
+					navigate('/home')
+				}
+			})
 	};
 
 	return (
