@@ -16,4 +16,26 @@ export class BaseController<T extends Document> {
 	) {
 		return this.baseService.findOneDocument(id);
 	}
+
+	@Post()
+	async addOneDocument(
+		@Body() dto: any
+	) {
+		return this.baseService.addOneDocument(dto);
+	}
+
+	@Put(':id')
+	async updateOneDocument(
+		@Body() dto: any,
+		@Param('id') id: string
+	) {
+		return this.baseService.updateOneDocument(id, dto);
+	}
+
+	@Delete(':id')
+	async removeOneDocument(
+		@Param('id') id: string
+	) {
+		return this.baseService.removeOneDocument(id);
+	}
 }
