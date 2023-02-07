@@ -1,8 +1,8 @@
 import { Document } from "mongoose";
-import { Get, Res, HttpStatus, Post, Body, Put, NotFoundException, Delete, Param, HttpCode, Request, InternalServerErrorException } from '@nestjs/common';
+import { Get, Res, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { BaseService } from "./base.service";
 
-export class BaseController<T extends Document> {
+export class BaseController<T extends Document, CreateDto, UpdateDto> {
 	constructor(private readonly baseService: BaseService<T>) { }
 
 	@Get()
@@ -19,14 +19,14 @@ export class BaseController<T extends Document> {
 
 	@Post()
 	async addOneDocument(
-		@Body() dto: any
+		@Body() dto: CreateDto
 	) {
 		return this.baseService.addOneDocument(dto);
 	}
 
 	@Put(':id')
 	async updateOneDocument(
-		@Body() dto: any,
+		@Body() dto: UpdateDto,
 		@Param('id') id: string
 	) {
 		return this.baseService.updateOneDocument(id, dto);
