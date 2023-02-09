@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+
+  backend:
+    build: ./backend
+    image: saloodo-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - DATABASE_URI=mongodb://db:27018/saloodo_data
+
+  frontend:
+    build: ./frontend
+    image: saloodo-frontend
+    ports:
+      - "8000:8000"
+    environment:
+      - VITE_BACKEND_URL=backend
+
+  db:
+    image: mongo
+    ports:
+      - "27018:27017"
