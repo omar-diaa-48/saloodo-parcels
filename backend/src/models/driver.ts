@@ -1,12 +1,15 @@
-import { Prop, Schema, SchemaFactory, } from '@nestjs/mongoose';
-import { HydratedDocument, Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, HydratedDocument } from 'mongoose';
 
 export type DriverDocument = HydratedDocument<Driver>;
 
 @Schema()
 export class Driver extends Document {
 	@Prop()
-	name: string;
+	username: string;
+
+	@Prop()
+	password: string;
 }
 
 export const DriverSchema = SchemaFactory.createForClass(Driver);
