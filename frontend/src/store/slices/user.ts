@@ -9,7 +9,8 @@ export interface UserState {
 	isAuthenticated: boolean;
 	profile: {
 		id?: string;
-		name?: string;
+		username?: string;
+		type?: "sender" | "driver";
 	}
 }
 
