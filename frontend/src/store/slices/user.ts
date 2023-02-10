@@ -32,6 +32,18 @@ export const signinAction = createAsyncThunk<IAuthResponse, ISigninDto>('user/si
 	}
 })
 
+export const refreshTokenAction = createAsyncThunk<IAuthResponse, void>('user/refreshToken', async (val, { dispatch, rejectWithValue }) => {
+	try {
+		const authRes = await axiosInstance.post('auth/refresh-token');
+
+		const data: AxiosResponseDataType<IAuthResponse> = authRes.data;
+
+		return data.data;
+	} catch (err) {
+		return rejectWithValue(err)
+	}
+})
+
 export const userSlice = createSlice({
 	name: 'user',
 	initialState,
