@@ -1,6 +1,7 @@
-import { UserType } from "./types"
+import { UserType } from "./types";
 
 export interface ISigninDto {
-	name: string
+	username: string
+	password: string
 	type: UserType;
 }

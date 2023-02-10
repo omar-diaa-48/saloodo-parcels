@@ -1,4 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Driver } from 'src/models/driver';
+import { Sender } from 'src/models/sender';
+import { DriverService } from '../driver/driver.service';
 import { SenderService } from '../sender/sender.service';
 import { AuthDto } from './auth.dto';
 
@@ -6,17 +9,31 @@ import { AuthDto } from './auth.dto';
 export class AuthService {
 	constructor(
 		private senderService: SenderService,
+		private driverService: DriverService,
 	) { }
 
 	async signin(dto: AuthDto) {
-		const { name } = dto;
+		const { username, password, type } = dto;
 
-		const sender = await this.senderService.findSenderByName(name);
+		let user: Driver | Sender;
 
-		if (!sender) {
-			throw new NotFoundException("Sender with this name not found")
+		switch (type) {
+			case "driver":
+				user = await this.driverService.findDriverByUserName(username);
+				break;
+
+			case "sender":
+				user = await this.senderService.findSenderByUserName(username);
+				break;
+
+			default:
+				throw new BadRequestException("User type must be defined")
 		}
 
-		return sender;
+		if (!user) {
+			throw new NotFoundException("User with this name not found")
+		}
+
+		return user;
 	}
 }

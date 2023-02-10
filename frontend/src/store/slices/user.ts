@@ -20,9 +20,9 @@ const initialState = {
 } as UserState;
 
 export const signinAction = createAsyncThunk<IAuthResponse, ISigninDto>('user/signin', async (userData, { rejectWithValue }) => {
-	const { name, type } = userData;
+	const { username, password, type } = userData;
 	try {
-		const authRes = await axiosInstance.post('auth/signin', { name, type });
+		const authRes = await axiosInstance.post('auth/signin', { username, password, type });
 
 		const data: AxiosResponseDataType<IAuthResponse> = authRes.data;
 

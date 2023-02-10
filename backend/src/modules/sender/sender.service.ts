@@ -12,7 +12,7 @@ export class SenderService extends BaseService<Sender>{
 		super(senderModel);
 	}
 
-	findSenderByName(name: string): Promise<Sender> {
-		return this.senderModel.findOne({ name }).exec();
+	findSenderByUserName(username: string): Promise<Sender> {
+		return this.senderModel.findOne({ username }).exec();
 	}
 }

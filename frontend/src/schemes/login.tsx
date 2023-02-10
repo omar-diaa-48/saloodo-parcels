@@ -1,9 +1,16 @@
 import * as yup from "yup";
 
 export const schema = {
-	name: yup
+	username: yup
 		.string()
-		.required("Must enter your name")
+		.required("Must enter your username"),
+	password: yup
+		.string()
+		.length(8)
+		.required("Must enter your password"),
+	type: yup
+		.string()
+		.oneOf(["sender", "driver"])
 }
 
 export const loginSchema = yup.object().shape(schema)
