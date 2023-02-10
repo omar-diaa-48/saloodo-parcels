@@ -6,7 +6,7 @@ export const schema = {
 		.required("Must enter your username"),
 	password: yup
 		.string()
-		.length(8)
+		.min(8)
 		.required("Must enter your password"),
 	type: yup
 		.string()

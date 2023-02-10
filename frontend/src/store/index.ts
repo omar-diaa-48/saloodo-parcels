@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { rtkQueryError } from './middlewares'
 import reducer from './root'
-import user from './slices/user'
 
 export const store = configureStore({
 	reducer,
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(rtkQueryError)
 })
 
 export type RootState = ReturnType<typeof store.getState>

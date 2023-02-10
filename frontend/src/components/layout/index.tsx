@@ -1,6 +1,7 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import Navbar from '../navbar'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import Navbar from '../navbar';
 
 interface LayoutProps { }
 
