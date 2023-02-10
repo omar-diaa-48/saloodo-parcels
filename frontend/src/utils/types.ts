@@ -1,3 +1,5 @@
+import React from "react";
+
 export type UserType = "sender" | "driver";
 
 export type AxiosResponseDataType<T> = {
@@ -24,4 +26,8 @@ export interface InputProps {
 	ref?: any;
 	style?: any;
 	readOnly?: boolean;
+}
+
+export interface BaseProps {
+	children: React.ReactNode;
 }
