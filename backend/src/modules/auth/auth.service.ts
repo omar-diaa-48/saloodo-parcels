@@ -26,6 +26,10 @@ export class AuthService {
 			throw new NotFoundException("User with this name not found")
 		}
 
+		if (user.password !== password) {
+			throw new NotFoundException("User credentials is incorrect, please try again")
+		}
+
 		const payload: JwtPayload = {
 			id: user.id,
 			username: user.username,
