@@ -4,7 +4,7 @@ import { GetUser } from 'src/decorators/get-user.decorator';
 import { Parcel } from 'src/models/parcel';
 import { JwtPayload } from '../auth/dto/jwt-payload';
 import { BaseController } from '../base/base.controller';
-import { CreateParcelDto, UpdateParcelDto } from './parcel.dto';
+import { CreateParcelDto } from './parcel.dto';
 import { ParcelService } from './parcel.service';
 
 @ApiTags('parcels')
@@ -21,25 +21,19 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 		return this.parcelService.findUserParcels(user, { limit: 10, skip: 0 }, ["sender"]);
 	}
 
-	@Get(':id')
-	async findOneDocumentById(
-		@Param('id') id: string
-	) {
-		return this.parcelService.findOneDocumentById(id, ["sender"]);
-	}
-
 	@Post()
-	async addOneDocument(
-		@Body() dto: CreateParcelDto
+	async addUserParcel(
+		@Body() dto: CreateParcelDto,
+		@GetUser() sender: JwtPayload
 	) {
-		return this.parcelService.addOneDocument(dto);
+		return this.parcelService.addUserParcel(sender, dto);
 	}
 
-	@Put(':id')
-	async updateOneDocument(
-		@Body() dto: UpdateParcelDto,
+	@Put(':id/assign')
+	async assignUserParcel(
+		@GetUser() driver: JwtPayload,
 		@Param('id') id: string
 	) {
-		return this.parcelService.updateOneDocument(id, dto);
+		return this.parcelService.assignUserParcel(driver, id);
 	}
 }

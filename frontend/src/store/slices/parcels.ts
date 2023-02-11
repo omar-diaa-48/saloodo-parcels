@@ -11,11 +11,35 @@ const initialState = {
 	data: []
 } as ParcelsState;
 
-export const getAllParcelsAction = createAsyncThunk<IParcel[], void>('parcels', async (_, { rejectWithValue }) => {
+export const getAllParcelsAction = createAsyncThunk<IParcel[], void>('parcels/getAllParcelsAction', async (_, { rejectWithValue }) => {
 	try {
 		const response = await axiosInstance.get('parcels');
 
 		const data: AxiosResponseDataType<IParcel[]> = response.data;
+
+		return data.data;
+	} catch (err) {
+		return rejectWithValue(err)
+	}
+})
+
+export const addParcelAction = createAsyncThunk<IParcel, void>('parcels/addParcelAction', async (dto, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.post('parcels', dto);
+
+		const data: AxiosResponseDataType<IParcel> = response.data;
+
+		return data.data;
+	} catch (err) {
+		return rejectWithValue(err)
+	}
+})
+
+export const assignParcelAction = createAsyncThunk<IParcel, { parcelId: string }>('parcels/assignParcelAction', async ({ parcelId }, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.put(`parcels/${parcelId}/assign`);
+
+		const data: AxiosResponseDataType<IParcel> = response.data;
 
 		return data.data;
 	} catch (err) {
