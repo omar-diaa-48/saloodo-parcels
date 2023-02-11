@@ -59,6 +59,32 @@ export const parcelsSlice = createSlice({
 				...state,
 				data
 			};
+		},
+
+		[addParcelAction.fulfilled.type]: (state, action: ActionPayloadType<IParcel>) => {
+			const parcel = action.payload;
+
+			return {
+				...state,
+				data: [...state.data, parcel]
+			};
+		},
+
+		[assignParcelAction.fulfilled.type]: (state, action: ActionPayloadType<IParcel>) => {
+			const parcel = action.payload;
+
+			const data = state.data.map((item) => {
+				if (item.id === parcel.id) {
+					return parcel;
+				}
+
+				return item;
+			})
+
+			return {
+				...state,
+				data
+			};
 		}
 	}
 })
