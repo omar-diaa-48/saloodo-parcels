@@ -5,6 +5,7 @@ import { Parcel } from 'src/models/parcel';
 import { JwtPayload } from '../auth/dto/jwt-payload';
 import { BaseService } from '../base/base.service';
 import { DriverService } from '../driver/driver.service';
+import { SenderService } from '../sender/sender.service';
 import { CreateParcelDto } from './parcel.dto';
 
 @Injectable()
@@ -12,7 +13,8 @@ export class ParcelService extends BaseService<Parcel>{
 	constructor(
 		@InjectModel('Parcel') private parcelModel: Model<Parcel>,
 
-		private readonly driverService: DriverService
+		private readonly driverService: DriverService,
+		private readonly senderService: SenderService,
 	) {
 		super(parcelModel);
 	}
@@ -44,9 +46,11 @@ export class ParcelService extends BaseService<Parcel>{
 			throw new BadRequestException("User creating parcel must be of sender type")
 		}
 
-		const sender = await this.driverService.findOneDocumentById(user.id)
+		const sender = await this.senderService.findOneDocumentById(user.id)
 
 		parcel = await this.parcelModel.create({ ...createParcelDto, sender: sender.id })
+
+		await parcel.populate(["sender", "driver"])
 
 		return parcel;
 	}
@@ -72,6 +76,8 @@ export class ParcelService extends BaseService<Parcel>{
 
 		parcel.driver = driver;
 		await parcel.save();
+
+		await parcel.populate(["sender", "driver"])
 
 		return parcel;
 	}

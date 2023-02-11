@@ -5,3 +5,9 @@ export interface ISigninDto {
 	password: string
 	type: UserType;
 }
+
+export interface IAddParcelDto {
+	item: string
+	pickup: string
+	dropoff: string;
+}

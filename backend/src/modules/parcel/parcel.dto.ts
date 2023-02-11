@@ -1,6 +1,6 @@
 
-import { IsString, IsNotEmpty } from 'class-validator';
-import { PartialType } from "@nestjs/mapped-types"
+import { PartialType } from "@nestjs/mapped-types";
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateParcelDto {
 	@IsString()
@@ -14,10 +14,6 @@ export class CreateParcelDto {
 	@IsString()
 	@IsNotEmpty()
 	item: string;
-
-	@IsString()
-	@IsNotEmpty()
-	sender: string;
 }
 
 export class UpdateParcelDto extends PartialType(CreateParcelDto) { }

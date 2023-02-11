@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/api";
+import { IAddParcelDto } from "../../utils/dtos";
 import { IParcel } from "../../utils/responses";
 import { ActionPayloadType, AxiosResponseDataType } from "../../utils/types";
 
@@ -23,7 +24,7 @@ export const getAllParcelsAction = createAsyncThunk<IParcel[], void>('parcels/ge
 	}
 })
 
-export const addParcelAction = createAsyncThunk<IParcel, void>('parcels/addParcelAction', async (dto, { rejectWithValue }) => {
+export const addParcelAction = createAsyncThunk<IParcel, IAddParcelDto>('parcels/addParcelAction', async (dto, { rejectWithValue }) => {
 	try {
 		const response = await axiosInstance.post('parcels', dto);
 
