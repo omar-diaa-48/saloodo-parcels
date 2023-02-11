@@ -9,8 +9,10 @@ export interface IUser {
 }
 
 export interface IParcel {
+	id: string;
 	item: string;
 	pickup: string;
 	dropoff: string;
-	user: IUser;
+	sender: IUser;
+	driver: IUser;
 }
