@@ -25,3 +25,38 @@ the bikers, and for serving mock data, via REST API.
 
 • You might consider dockerising the application and if you want you can provide a docker-
 compose file.
+
+
+## Users seeded
+
+const drivers = [
+	{ username: "john", password: "12345678" },
+	{ username: "samy", password: "12345678" },
+	{ username: "helmy", password: "12345678" },
+	{ username: "sara", password: "12345678" },
+	{ username: "aya", password: "12345678" },
+	{ username: "sabreen", password: "12345678" },
+	{ username: "sally", password: "12345678" },
+	{ username: "marta", password: "12345678" },
+	{ username: "iain", password: "12345678" },
+	{ username: "fady", password: "12345678" },
+	{ username: "hesham", password: "12345678" },
+]
+
+const senders = [
+	{ username: "sara", password: "12345678" },
+	{ username: "aya", password: "12345678" },
+	{ username: "sabreen", password: "12345678" },
+	{ username: "sally", password: "12345678" },
+	{ username: "marta", password: "12345678" }
+] 
+
+## To run the project
+
+1. Run
+   ```sh
+   docker-compose up
+   ```
+
+## To use the app 
+uses port 3000 to run FE and 8000 to run BE
