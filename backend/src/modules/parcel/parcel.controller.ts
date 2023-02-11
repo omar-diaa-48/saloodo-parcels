@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/decorators/get-user.decorator';
 import { Parcel } from 'src/models/parcel';
+import { JwtPayload } from '../auth/dto/jwt-payload';
 import { BaseController } from '../base/base.controller';
 import { CreateParcelDto, UpdateParcelDto } from './parcel.dto';
 import { ParcelService } from './parcel.service';
@@ -13,8 +15,10 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 	}
 
 	@Get()
-	async findAllDocuments() {
-		return this.parcelService.findAllDocuments({ limit: 10, skip: 0 }, ["sender"]);
+	async findUserParcels(
+		@GetUser() user: JwtPayload
+	) {
+		return this.parcelService.findUserParcels(user, { limit: 10, skip: 0 }, ["sender"]);
 	}
 
 	@Get(':id')
