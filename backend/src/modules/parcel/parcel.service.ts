@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
+import { History } from 'src/models/history';
 import { Parcel } from 'src/models/parcel';
 import { JwtPayload } from '../auth/dto/jwt-payload';
 import { BaseService } from '../base/base.service';
@@ -46,6 +47,25 @@ export class ParcelService extends BaseService<Parcel>{
 		return parcels;
 	}
 
+	async findUserParcel(parcelId: string, user: JwtPayload): Promise<{ data: Parcel, actions: History[] }> {
+		const relations = ["sender", "driver"]
+		const parcel: Parcel = await this.parcelModel.findById(parcelId).populate(relations)
+
+		if (!parcel) {
+			throw new BadRequestException(`Parcel with id ${parcelId} not found`)
+		}
+
+		if (user.type === "sender") {
+			if (user.id !== parcel.id) {
+				throw new UnauthorizedException(`User not authorized to view parcel with id ${parcelId}`)
+			}
+		}
+
+		const history: History[] = await this.historyService.findParcelHistory(parcel.id)
+
+		return { data: parcel, actions: history };
+	}
+
 	async addUserParcel(user: JwtPayload, createParcelDto: CreateParcelDto): Promise<Parcel> {
 		let parcel: Parcel;
 
@@ -59,7 +79,7 @@ export class ParcelService extends BaseService<Parcel>{
 
 		await parcel.populate(["sender", "driver"])
 
-		await this.historyService.addOneDocument({ action_taker: sender.id, action_taker_type: "sender", action_type: "create" })
+		await this.historyService.addOneDocument({ action_taker: sender.id, action_taker_type: "Sender", action_type: "create" })
 
 		return parcel;
 	}
@@ -86,7 +106,7 @@ export class ParcelService extends BaseService<Parcel>{
 		parcel.driver = driver;
 		await parcel.save();
 
-		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "driver", action_type: "assign" })
+		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "Driver", action_type: "assign" })
 
 		return parcel;
 	}
@@ -117,7 +137,7 @@ export class ParcelService extends BaseService<Parcel>{
 		parcel.is_delivered = true;
 		await parcel.save();
 
-		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "driver", action_type: "deliver" })
+		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "Driver", action_type: "deliver" })
 
 		return parcel;
 	}

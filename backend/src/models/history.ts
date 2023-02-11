@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, HydratedDocument } from 'mongoose';
-import { HistoryActionType, UserType } from 'src/utils/types';
+import { ActionTakerType, HistoryActionType } from 'src/utils/types';
+import { Driver } from './driver';
+import { Parcel } from './parcel';
+import { Sender } from './sender';
 
 export type HistoryDocument = HydratedDocument<History>;
 
@@ -12,11 +15,17 @@ export class History extends Document {
 	@Prop({ enum: ["create", "assign", "deliver"] })
 	action_type: HistoryActionType;
 
-	@Prop({ enum: ["sender", "driver"] })
-	action_taker_type: UserType;
+	@Prop({ enum: ["Sender", "Driver"] })
+	action_taker_type: ActionTakerType;
 
-	@Prop({ type: mongoose.Schema.Types.ObjectId })
-	action_taker: string;
+	@Prop({
+		type: mongoose.Schema.Types.ObjectId,
+		refPath: "action_taker_type"
+	})
+	action_taker: Driver | Sender;
+
+	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Parcel" })
+	parcel: Parcel;
 }
 
 export const HistorySchema = SchemaFactory.createForClass(History);

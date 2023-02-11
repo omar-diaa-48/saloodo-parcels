@@ -21,6 +21,14 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 		return this.parcelService.findUserParcels(user, { limit: 10, skip: 0 }, ["sender", "driver"]);
 	}
 
+	@Get(':id')
+	async findUserParcel(
+		@GetUser() user: JwtPayload,
+		@Param('id') parcelId: string
+	) {
+		return this.parcelService.findUserParcel(parcelId, user);
+	}
+
 	@Post()
 	async addUserParcel(
 		@Body() dto: CreateParcelDto,
