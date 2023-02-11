@@ -12,6 +12,8 @@ const AppRoutes = () => {
 			</Route>
 
 			<Route path="/signin/" element={<Login />}></Route>
+
+			<Route path="*" element={<Parcels />}></Route>
 		</Routes>
 	)
 }

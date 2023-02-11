@@ -1,11 +1,11 @@
 
-import { IsString, IsNotEmpty } from 'class-validator';
-import { PartialType } from "@nestjs/mapped-types"
+import { PartialType } from "@nestjs/mapped-types";
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateDriverDto {
 	@IsString()
 	@IsNotEmpty()
-	name: string;
+	username: string;
 }
 
 export class UpdateDriverDto extends PartialType(CreateDriverDto) { }
