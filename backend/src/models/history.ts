@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, HydratedDocument } from 'mongoose';
+import { HistoryActionType, UserType } from 'src/utils/types';
 
 export type HistoryDocument = HydratedDocument<History>;
 
@@ -9,10 +10,10 @@ export class History extends Document {
 	timestamp: number;
 
 	@Prop({ enum: ["create", "assign", "deliver"] })
-	action_type: "create" | "assign" | "deliver";
+	action_type: HistoryActionType;
 
 	@Prop({ enum: ["sender", "driver"] })
-	action_taker_type: "sender" | "driver";
+	action_taker_type: UserType;
 
 	@Prop({ type: mongoose.Schema.Types.ObjectId })
 	action_taker: string;

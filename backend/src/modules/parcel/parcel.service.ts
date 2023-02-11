@@ -5,6 +5,7 @@ import { Parcel } from 'src/models/parcel';
 import { JwtPayload } from '../auth/dto/jwt-payload';
 import { BaseService } from '../base/base.service';
 import { DriverService } from '../driver/driver.service';
+import { HistoryService } from '../history/history.service';
 import { SenderService } from '../sender/sender.service';
 import { CreateParcelDto } from './parcel.dto';
 
@@ -15,6 +16,7 @@ export class ParcelService extends BaseService<Parcel>{
 
 		private readonly driverService: DriverService,
 		private readonly senderService: SenderService,
+		private readonly historyService: HistoryService,
 	) {
 		super(parcelModel);
 	}
@@ -57,6 +59,8 @@ export class ParcelService extends BaseService<Parcel>{
 
 		await parcel.populate(["sender", "driver"])
 
+		await this.historyService.addOneDocument({ action_taker: sender.id, action_taker_type: "sender", action_type: "create" })
+
 		return parcel;
 	}
 
@@ -81,6 +85,8 @@ export class ParcelService extends BaseService<Parcel>{
 
 		parcel.driver = driver;
 		await parcel.save();
+
+		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "driver", action_type: "assign" })
 
 		return parcel;
 	}
@@ -110,6 +116,8 @@ export class ParcelService extends BaseService<Parcel>{
 
 		parcel.is_delivered = true;
 		await parcel.save();
+
+		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "driver", action_type: "deliver" })
 
 		return parcel;
 	}
