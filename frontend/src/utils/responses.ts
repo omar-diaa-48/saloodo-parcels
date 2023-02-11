@@ -1,6 +1,9 @@
+import { UserType } from "./types";
+
 export interface IAuthResponse {
 	id: string,
 	username: string;
+	type: UserType;
 	jwt_token: string;
 }
 
