@@ -16,8 +16,6 @@ export const GetUser = createParamDecorator(
 
 		const payload: JwtPayload = jwt.decode(accessToken) as JwtPayload;
 
-		console.log({ payload });
-
 		return payload;
 	},
 );

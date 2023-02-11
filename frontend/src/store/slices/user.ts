@@ -15,7 +15,7 @@ export interface UserState {
 }
 
 const initialState = {
-	isAuthenticated: false,
+	isAuthenticated: true,
 	profile: {}
 } as UserState;
 
@@ -60,6 +60,23 @@ export const userSlice = createSlice({
 	},
 	extraReducers: {
 		[signinAction.fulfilled.type]: (state, action: ActionPayloadType<IAuthResponse>) => {
+			const { id, username, jwt_token } = action.payload;
+
+			axiosInstance.defaults.headers.common["authorization"] = "Bearer " + jwt_token;
+			localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, jwt_token);
+
+			return {
+				...state,
+				isAuthenticated: true,
+				profile: {
+					...state.profile,
+					id,
+					username,
+				}
+			};
+		},
+
+		[refreshTokenAction.fulfilled.type]: (state, action: ActionPayloadType<IAuthResponse>) => {
 			const { id, username, jwt_token } = action.payload;
 
 			axiosInstance.defaults.headers.common["authorization"] = "Bearer " + jwt_token;

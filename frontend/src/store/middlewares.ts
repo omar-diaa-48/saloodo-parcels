@@ -1,7 +1,9 @@
 import { isAsyncThunkAction, isRejectedWithValue, Middleware } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-const dismissed: string[] = []
+const dismissed: string[] = [
+	'user/refreshToken'
+]
 
 export const rtkQueryError: Middleware = (api) => (next) => (action) => {
 	if (isAsyncThunkAction(action)) {
