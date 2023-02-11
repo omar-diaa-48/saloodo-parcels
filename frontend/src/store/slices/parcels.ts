@@ -48,6 +48,18 @@ export const assignParcelAction = createAsyncThunk<IParcel, { parcelId: string }
 	}
 })
 
+export const deliverParcelAction = createAsyncThunk<IParcel, { parcelId: string }>('parcels/deliverParcelAction', async ({ parcelId }, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.put(`parcels/${parcelId}/deliver`);
+
+		const data: AxiosResponseDataType<IParcel> = response.data;
+
+		return data.data;
+	} catch (err) {
+		return rejectWithValue(err)
+	}
+})
+
 export const parcelsSlice = createSlice({
 	name: 'parcels',
 	initialState,
@@ -75,7 +87,24 @@ export const parcelsSlice = createSlice({
 			const parcel = action.payload;
 
 			const data = state.data.map((item) => {
-				if (item.id === parcel.id) {
+				if (item._id === parcel._id) {
+					return parcel;
+				}
+
+				return item;
+			})
+
+			return {
+				...state,
+				data
+			};
+		},
+
+		[deliverParcelAction.fulfilled.type]: (state, action: ActionPayloadType<IParcel>) => {
+			const parcel = action.payload;
+
+			const data = state.data.map((item) => {
+				if (item._id === parcel._id) {
 					return parcel;
 				}
 

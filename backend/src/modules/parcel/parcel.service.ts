@@ -34,7 +34,12 @@ export class ParcelService extends BaseService<Parcel>{
 				throw new BadRequestException("User type must be defined")
 		}
 
-		parcels = await this.parcelModel.find(query).limit(pagination.limit).skip(pagination.skip).populate(relations)
+		parcels = await this.parcelModel.find(query).populate(relations)
+
+		if (user.type === "driver") {
+			const freeparcels: Parcel[] = await this.parcelModel.find({ driver: null }).populate(relations)
+			parcels = parcels.concat(freeparcels)
+		}
 
 		return parcels;
 	}
@@ -48,7 +53,7 @@ export class ParcelService extends BaseService<Parcel>{
 
 		const sender = await this.senderService.findOneDocumentById(user.id)
 
-		parcel = await this.parcelModel.create({ ...createParcelDto, sender: sender.id })
+		parcel = await this.parcelModel.create({ ...createParcelDto, is_delivered: false, sender: sender.id })
 
 		await parcel.populate(["sender", "driver"])
 
@@ -77,7 +82,34 @@ export class ParcelService extends BaseService<Parcel>{
 		parcel.driver = driver;
 		await parcel.save();
 
-		await parcel.populate(["sender", "driver"])
+		return parcel;
+	}
+
+	async deliverUserParcel(user: JwtPayload, parcelId: string): Promise<Parcel> {
+		let parcel: Parcel;
+
+		if (user.type !== "driver") {
+			throw new BadRequestException("User creating parcel must be of driver type")
+		}
+
+		const driver = await this.driverService.findOneDocumentById(user.id)
+
+		parcel = await this.parcelModel.findById(parcelId).populate(["sender", "driver"])
+
+		if (!parcel) {
+			throw new BadRequestException(`Parcel with id ${parcelId} not found`)
+		}
+
+		if (parcel.driver.id !== driver.id) {
+			throw new BadRequestException(`Parcel with id ${parcelId} is already assiged to ${parcel.driver.username}`)
+		}
+
+		if (parcel.is_delivered) {
+			throw new BadRequestException(`Parcel with id ${parcelId} is already delivered`)
+		}
+
+		parcel.is_delivered = true;
+		await parcel.save();
 
 		return parcel;
 	}

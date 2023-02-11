@@ -17,7 +17,10 @@ export class Parcel extends Document {
 	@Prop()
 	dropoff: string;
 
-	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sender' })
+	@Prop()
+	is_delivered: boolean;
+
+	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sender', required: true })
 	sender: Sender;
 
 	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' })

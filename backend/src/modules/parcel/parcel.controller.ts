@@ -18,7 +18,7 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 	async findUserParcels(
 		@GetUser() user: JwtPayload
 	) {
-		return this.parcelService.findUserParcels(user, { limit: 10, skip: 0 }, ["sender"]);
+		return this.parcelService.findUserParcels(user, { limit: 10, skip: 0 }, ["sender", "driver"]);
 	}
 
 	@Post()
@@ -32,8 +32,16 @@ export class ParcelController extends BaseController<Parcel, CreateParcelDto, Cr
 	@Put(':id/assign')
 	async assignUserParcel(
 		@GetUser() driver: JwtPayload,
-		@Param('id') id: string
+		@Param('id') parcelId: string
 	) {
-		return this.parcelService.assignUserParcel(driver, id);
+		return this.parcelService.assignUserParcel(driver, parcelId);
+	}
+
+	@Put(':id/deliver')
+	async deliverUserParcel(
+		@GetUser() driver: JwtPayload,
+		@Param('id') parcelId: string
+	) {
+		return this.parcelService.deliverUserParcel(driver, parcelId);
 	}
 }

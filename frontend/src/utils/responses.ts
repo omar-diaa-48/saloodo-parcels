@@ -12,10 +12,11 @@ export interface IUser {
 }
 
 export interface IParcel {
-	id: string;
+	_id: string;
 	item: string;
 	pickup: string;
 	dropoff: string;
+	is_delivered?: boolean;
 	sender: IUser;
 	driver: IUser;
 }
