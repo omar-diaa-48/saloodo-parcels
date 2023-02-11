@@ -4,6 +4,7 @@ import { RootState } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { closeModalAction } from '../../store/slices/app';
 import CreateParcelModal from '../modals/CreateParcelModal';
+import ParcelActionsHistoryModal from '../modals/ParcelActionsHistoryModal';
 
 interface ModalRendererProps { }
 
@@ -16,6 +17,11 @@ const ModalRenderer: React.FC<ModalRendererProps> = () => {
 			case "create-parcel-modal":
 				return (
 					<CreateParcelModal />
+				)
+
+			case "show-parcel-modal":
+				return (
+					<ParcelActionsHistoryModal {...modal.args} />
 				)
 
 			default:

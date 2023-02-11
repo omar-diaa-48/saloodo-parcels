@@ -2,7 +2,7 @@ import React from "react";
 
 export type UserType = "sender" | "driver";
 
-export type ModalType = "create-parcel-modal";
+export type ModalType = "create-parcel-modal" | "show-parcel-modal";
 
 
 export type AxiosResponseDataType<T> = {

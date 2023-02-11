@@ -56,7 +56,7 @@ export class ParcelService extends BaseService<Parcel>{
 		}
 
 		if (user.type === "sender") {
-			if (user.id !== parcel.id) {
+			if (user.id !== parcel.sender.id) {
 				throw new UnauthorizedException(`User not authorized to view parcel with id ${parcelId}`)
 			}
 		}
@@ -79,7 +79,7 @@ export class ParcelService extends BaseService<Parcel>{
 
 		await parcel.populate(["sender", "driver"])
 
-		await this.historyService.addOneDocument({ action_taker: sender.id, action_taker_type: "Sender", action_type: "create" })
+		await this.historyService.addOneDocument({ action_taker: sender.id, parcel: parcel.id, action_taker_type: "Sender", action_type: "create" })
 
 		return parcel;
 	}
@@ -106,7 +106,7 @@ export class ParcelService extends BaseService<Parcel>{
 		parcel.driver = driver;
 		await parcel.save();
 
-		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "Driver", action_type: "assign" })
+		await this.historyService.addOneDocument({ action_taker: driver.id, parcel: parcel.id, action_taker_type: "Driver", action_type: "assign" })
 
 		return parcel;
 	}
@@ -137,7 +137,7 @@ export class ParcelService extends BaseService<Parcel>{
 		parcel.is_delivered = true;
 		await parcel.save();
 
-		await this.historyService.addOneDocument({ action_taker: driver.id, action_taker_type: "Driver", action_type: "deliver" })
+		await this.historyService.addOneDocument({ action_taker: driver.id, parcel: parcel.id, action_taker_type: "Driver", action_type: "deliver" })
 
 		return parcel;
 	}

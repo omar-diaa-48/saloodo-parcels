@@ -1,15 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/api";
 import { IAddParcelDto } from "../../utils/dtos";
-import { IParcel } from "../../utils/responses";
+import { IActionHistory, IParcel } from "../../utils/responses";
 import { ActionPayloadType, AxiosResponseDataType } from "../../utils/types";
 
 export interface ParcelsState {
 	data: IParcel[]
+	specific?: { data?: IParcel, actions?: IActionHistory[] };
+	isLoadingSpecific: boolean;
 }
 
 const initialState = {
-	data: []
+	data: [],
+	specific: {},
+	isLoadingSpecific: false
 } as ParcelsState;
 
 export const getAllParcelsAction = createAsyncThunk<IParcel[], void>('parcels/getAllParcelsAction', async (_, { rejectWithValue }) => {
@@ -60,10 +64,28 @@ export const deliverParcelAction = createAsyncThunk<IParcel, { parcelId: string 
 	}
 })
 
+export const getParcelDetailsAction = createAsyncThunk<{ data: IParcel, actions: IActionHistory[] }, { parcelId: string }>('parcels/getParcelDetailsAction', async ({ parcelId }, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.get(`parcels/${parcelId}`);
+
+		const data: AxiosResponseDataType<{ data: IParcel, actions: IActionHistory[] }> = response.data;
+
+		return data.data;
+	} catch (err) {
+		return rejectWithValue(err)
+	}
+})
+
 export const parcelsSlice = createSlice({
 	name: 'parcels',
 	initialState,
-	reducers: {},
+	reducers: {
+		clearParcelDetailsAction: (state) => ({
+			...state,
+			specific: {},
+			isLoadingSpecific: false
+		})
+	},
 	extraReducers: {
 		[getAllParcelsAction.fulfilled.type]: (state, action: ActionPayloadType<IParcel[]>) => {
 			const data = action.payload;
@@ -115,8 +137,38 @@ export const parcelsSlice = createSlice({
 				...state,
 				data
 			};
+		},
+
+		[getParcelDetailsAction.fulfilled.type]: (state, action: ActionPayloadType<{ data: IParcel, actions: IActionHistory[] }>) => {
+			const { data, actions } = action.payload;
+
+			return {
+				...state,
+				specific: {
+					data,
+					actions,
+				},
+				isLoadingSpecific: false
+			};
+		},
+
+		[getParcelDetailsAction.pending.type]: (state) => {
+			return {
+				...state,
+				isLoadingSpecific: true
+			};
+		},
+
+		[getParcelDetailsAction.rejected.type]: (state) => {
+
+			return {
+				...state,
+				isLoadingSpecific: false
+			};
 		}
 	}
 })
+
+export const { clearParcelDetailsAction } = parcelsSlice.actions
 
 export default parcelsSlice.reducer

@@ -1,7 +1,9 @@
+import HistoryIcon from '@mui/icons-material/History';
 import React from 'react';
 import LogoSvg from "../../assets/logo.svg";
 import { RootState } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { openModalAction } from '../../store/slices/app';
 import { assignParcelAction, deliverParcelAction } from '../../store/slices/parcels';
 import { IParcel } from '../../utils/responses';
 
@@ -11,12 +13,13 @@ interface ParcelProps {
 
 const Parcel: React.FC<ParcelProps> = ({ parcel }) => {
 	const dispatch = useAppDispatch();
-	const { profile } = useAppSelector((state: RootState) => state.user)
+	const { profile } = useAppSelector((state: RootState) => state.user);
 
 	return (
 		<div key={parcel._id} className="relative">
-			<div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
+			<div className="relative min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
 				<img src={LogoSvg} alt={parcel.item} className="h-full w-full object-center lg:h-full lg:w-full" />
+				<HistoryIcon onClick={() => dispatch(openModalAction({ current: "show-parcel-modal", args: { parcelId: parcel._id } }))} className='absolute top-5 right-5 cursor-pointer hover:text-purple-700' />
 			</div>
 			<div className="mt-4 flex justify-between">
 				<div>

@@ -13,13 +13,13 @@ export class HistoryService extends BaseService<History>{
 		super(historyModel);
 	}
 
-	addOneDocument(dto: { action_type: HistoryActionType, action_taker_type: ActionTakerType, action_taker: string }): Promise<History & { _id: Types.ObjectId; }> {
-		const { action_type, action_taker_type, action_taker } = dto;
-		return this.historyModel.create({ action_type, action_taker, action_taker_type });
+	addOneDocument(dto: { parcel: string, action_type: HistoryActionType, action_taker_type: ActionTakerType, action_taker: string }): Promise<History & { _id: Types.ObjectId; }> {
+		const { parcel, action_type, action_taker_type, action_taker } = dto;
+		return this.historyModel.create({ parcel, action_type, action_taker, action_taker_type });
 	}
 
 	async findParcelHistory(parcelId: string): Promise<History[]> {
-		const actions = await this.historyModel.find({ parcel: parcelId }).populate(["parcel", "action_taker"])
+		const actions = await this.historyModel.find({ parcel: parcelId }).sort({ timestamp: 'asc' }).populate(["parcel", "action_taker"])
 
 		return actions;
 	}
