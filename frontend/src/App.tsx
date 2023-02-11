@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
+import ModalRenderer from './components/shared/CreateParcelModel';
 import AppRoutes from './routes';
 import { useAppDispatch } from './store/hooks';
 import { refreshTokenAction, signoutAction } from './store/slices/user';
@@ -20,6 +21,7 @@ function App() {
 		<div>
 			<AppRoutes />
 			<ToastContainer />
+			<ModalRenderer />
 		</div>
 	)
 }
